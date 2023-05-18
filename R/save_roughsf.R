@@ -5,13 +5,24 @@
 #' @param wait time in seconds to wait for page load
 #' @return No return value, called for side effect
 #' @export
-save_roughsf <- function(rsf,file,background = "white",wait = 4){
-  if(!requireNamespace("pagedown", quietly = TRUE)){
+save_roughsf <- function(rsf, file, background = "white", wait = 4) {
+  if (!requireNamespace("pagedown", quietly = TRUE)) {
     stop("pagedown is needed for this function to work. Please install it.", call. = FALSE)
   }
   tfile <- tempfile(fileext = ".html")
-  format <- substr(file,nchar(file)-2,nchar(file))
-  htmlwidgets::saveWidget(rsf, file = tfile,background = background,selfcontained = TRUE)
-  suppressMessages(pagedown::chrome_print(tfile,output=file,format=format,selector = "canvas#canvas",wait=wait))
+  format <- substr(file, nchar(file) - 2, nchar(file))
+  htmlwidgets::saveWidget(
+    rsf,
+    file = tfile,
+    background = background,
+    selfcontained = TRUE
+  )
+  suppressMessages(pagedown::chrome_print(
+    tfile,
+    output = file,
+    format = format,
+    selector = ".roughsf.html-widget.html-widget-static-bound",
+    wait = wait
+  ))
   suppressMessages(file.remove(tfile))
 }
